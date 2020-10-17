@@ -2,13 +2,16 @@
 
 require_once realpath("vendor/autoload.php");
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'gradesystem');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
+require_once "project_params.php";
 
-echo "Hello";
+if(!empty($_GET["student"]))
+{
+    $schoolBoard = \GradeSystem\Services\SchoolBoardFactory::getSchoolBoard(SCHOOL_BOARD_TYPE);
 
-$repo = new \GradeSystem\Database\StudentRepository();
-$repo->findById(1);
-
+    try {
+        echo $schoolBoard->findStudent($_GET["student"]);
+    } catch (Exception $exception)
+    {
+        echo $exception->getMessage();
+    }
+}
