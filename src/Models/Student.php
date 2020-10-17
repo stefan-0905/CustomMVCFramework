@@ -4,7 +4,7 @@ namespace GradeSystem\Models;
 
 use GradeSystem\Services\TextFormatter;
 
-class Student
+class Student extends AbstractModel
 {
     public int $id;
     public string $name;

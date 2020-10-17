@@ -2,9 +2,9 @@
 
 namespace GradeSystem\Database;
 
-use GradeSystem\Models\Student;
+use GradeSystem\Models\AbstractModel;
 
 interface IRepository
 {
-    public function findById(int $id) : Student;
+    public function findById(int $id) : AbstractModel;
 }
