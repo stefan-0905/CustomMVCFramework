@@ -2,36 +2,32 @@
 
 namespace GradeSystem\Database;
 
+use GradeSystem\Models\Student;
+use GradeSystem\Services\Parser;
+
 class StudentRepository implements IRepository
 {
-    public function findAll()
+    public function findById(int $id) : Student
     {
-        $db = Database::connect();
+        try
+        {
+            $db = Database::connect();
 
-        $sql = "SELECT id, name, grades FROM students;";
+            $sql = "SELECT id, name, grades FROM students WHERE id = :id LIMIT 1;";
 
-        $stmt = $db->prepare($sql);
+            $stmt = $db->prepare($sql);
 
-        $stmt->execute();
+            $stmt->bindParam(":id", $id);
 
-        return $stmt->fetchAll();
+            $stmt->execute();
 
-    }
+            $result = $stmt->fetch();
 
-    public function findById($id)
-    {
-        $db = Database::connect();
-
-        $sql = "SELECT id, name, grades FROM students WHERE id = :id LIMIT 1;";
-
-        $stmt = $db->prepare($sql);
-
-        $stmt->bindParam(":id", $id);
-
-        $stmt->execute();
-
-        $result = $stmt->fetch();
-
-        return $result;
+            return Parser::parse($result);
+        } catch (\Exception $exception)
+        {
+            echo $exception->getMessage();
+        }
+        return NULL;
     }
 }

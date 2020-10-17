@@ -6,9 +6,9 @@ use PDO;
 
 class Database
 {
-    private static $instance = NULL;
+    private static ?PDO $instance = NULL;
 
-    public static function connect()
+    public static function connect() : PDO
     {
         if(!self::$instance)
         {
