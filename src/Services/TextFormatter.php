@@ -16,15 +16,15 @@ class TextFormatter
         header('Content-Type: application/xml');
 
         $studentXML = new \SimpleXMLElement("<student></student>");
-        $studentXML->addChild("id", $student->id);
+        $studentXML->addChild("id", (string)$student->id);
         $studentXML->addChild("name", $student->name);
         $gradesXML = $studentXML->addChild("grades");
         foreach($student->grades as $grade)
-            $gradesXML->addChild("grade", $grade);
-        $studentXML->addChild("average", $student->average);
-        $studentXML->addChild("result", $student->result);
+            $gradesXML->addChild("grade", (string)$grade);
+        $studentXML->addChild("average", (string)$student->average);
+        $studentXML->addChild("result", (string)$student->result);
 
-        return $studentXML->asXML();
+        return (string)$studentXML->asXML();
 
     }
 }

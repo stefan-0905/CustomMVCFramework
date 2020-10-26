@@ -2,20 +2,15 @@
 
 namespace GradeSystem\Database;
 
-use GradeSystem\Models\Student;
-use GradeSystem\Services\Parser;
-
-class StudentRepository implements IRepository
+class StudentRepository extends Repository implements IRepository
 {
-    public function findById(int $id) : Student
+    public function findById(int $id) : array
     {
         try
         {
-            $db = Database::connect();
-
             $sql = "SELECT id, name, grades FROM students WHERE id = :id LIMIT 1;";
 
-            $stmt = $db->prepare($sql);
+            $stmt = $this->db->prepare($sql);
 
             $stmt->bindParam(":id", $id);
 
@@ -23,11 +18,13 @@ class StudentRepository implements IRepository
 
             $result = $stmt->fetch();
 
-            return Parser::parse($result);
+            if($result == NULL) return array();
+
+            return $result;
         } catch (\Exception $exception)
         {
             echo $exception->getMessage();
+            return array();
         }
-        return NULL;
     }
 }

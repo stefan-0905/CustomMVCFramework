@@ -6,7 +6,7 @@ use GradeSystem\Models\Student;
 
 class Parser
 {
-    public static function parse($student) : Student
+    public static function parse(array $student) : ?Student
     {
         if(empty($student)) return NULL;
 
