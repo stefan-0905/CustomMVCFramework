@@ -4,8 +4,8 @@ namespace GradeSystem\Controllers;
 
 use Exception;
 use GradeSystem\Models\Exceptions\RecordNotFoundException;
-use GradeSystem\Models\Page;
-use GradeSystem\Models\Response;
+use GradeSystem\Framework\Page;
+use GradeSystem\Framework\Response;
 use InvalidArgumentException;
 
 use GradeSystem\Models\Student;

@@ -2,7 +2,7 @@
 
 namespace GradeSystem\Controllers;
 
-use GradeSystem\Models\Page;
+use GradeSystem\Framework\Page;
 
 class HomeController extends Controller
 {

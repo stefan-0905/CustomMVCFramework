@@ -1,8 +1,6 @@
 <?php
 
-namespace GradeSystem;
-
-use GradeSystem\Models\ControllerInvoker;
+namespace GradeSystem\Framework;
 
 class Route
 {
@@ -49,7 +47,7 @@ class Route
     private static function getPath() : string
     {
         $path = strtolower($_SERVER["REQUEST_URI"]);
-//        $path = str_replace("", "", $uri);
+
         $path = str_replace(".php", "", $path);
 
         if(str_contains($path, "?"))
