@@ -2,16 +2,16 @@
 
 require_once realpath("vendor/autoload.php");
 
-require_once "project_params.php";
+use GradeSystem\Route;
+use GradeSystem\Models\Response;
 
-if(!empty($_GET["student"]))
-{
-    $schoolBoard = \GradeSystem\Services\SchoolBoardFactory::getSchoolBoard(SCHOOL_BOARD_TYPE);
+require_once "routes.php";
 
-    try {
-        echo $schoolBoard->findStudent($_GET["student"]);
-    } catch (Exception $exception)
-    {
-        echo $exception->getMessage();
-    }
+
+if (!Route::exists()) {
+    Response::e404(["message" => "This page does not exist."]);
 }
+
+
+
+

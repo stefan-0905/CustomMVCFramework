@@ -2,19 +2,19 @@
 
 namespace GradeSystem\Services;
 
+use GradeSystem\Database\StudentRepository;
+
 class SchoolBoardFactory
 {
-    public static function getSchoolBoard($schoolBoard) : ISchoolBoard
+
+    public static function getSchoolBoard(string $schoolBoard) : ISchoolBoard
     {
         if($schoolBoard == "CSM")
         {
-            return new CSM();
-        }
-        else if($schoolBoard == "CSMB")
-        {
-            return new CSMB();
+            return new SchoolBoard(new StudentRepository(), new CSMCalculator());
         }
 
-        return NULL;
+        return new SchoolBoard(new StudentRepository(), new CSMBCalculator());
+
     }
 }

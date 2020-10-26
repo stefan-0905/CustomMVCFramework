@@ -4,7 +4,7 @@ namespace GradeSystem\Models;
 
 use GradeSystem\Services\TextFormatter;
 
-class Student extends AbstractModel
+class Student
 {
     public int $id;
     public string $name;
@@ -12,16 +12,19 @@ class Student extends AbstractModel
     public float $average;
     public string $result;
 
-    private $schoolBoard;
+    private string $schoolBoard;
 
-    public function __construct($id, $name, $grades)
+    public function __construct(int $id, string $name,  array $grades)
     {
         $this->id = $id;
         $this->name = $name;
         $this->grades = $grades;
+        $this->average = 0;
+        $this->result = "FAIL";
+        $this->schoolBoard = "";
     }
 
-    public function setSchoolBoard(string $schoolBoard)
+    public function setSchoolBoard(string $schoolBoard) : void
     {
         $this->schoolBoard = $schoolBoard;
     }
