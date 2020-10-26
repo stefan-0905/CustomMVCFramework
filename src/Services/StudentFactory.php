@@ -18,6 +18,20 @@ class StudentFactory implements IStudentFactory
         $this->repository = $repository;
     }
 
+    public function findAll() : ?array
+    {
+        $students = array();
+
+        $studentsArray = $this->repository->findAll();
+
+        foreach($studentsArray as $student)
+        {
+            $students[] = Parser::parse($student);
+        }
+
+        return $students;
+    }
+
     /**
      * Find student by id
      *

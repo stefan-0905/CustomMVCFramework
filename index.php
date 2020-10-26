@@ -2,8 +2,8 @@
 
 require_once realpath("vendor/autoload.php");
 
-use GradeSystem\Route;
-use GradeSystem\Models\Response;
+use GradeSystem\Framework\Route;
+use GradeSystem\Framework\Response;
 
 require_once "routes.php";
 

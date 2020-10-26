@@ -26,7 +26,7 @@ class Page
         }
         else {
             header("Status: 404 Not Found", true, 404);
-            if(!empty($errorInfo)) header("Body: " . json_encode(["message" => "File for this page does not exist."]));
+            header("Body: " . json_encode(["message" => "File for this page does not exist."]));
             self::error();
         }
     }
