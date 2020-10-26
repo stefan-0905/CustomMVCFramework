@@ -3,9 +3,11 @@
 namespace GradeSystem\Controllers;
 
 use Exception;
+use GradeSystem\Database\StudentRepository;
 use GradeSystem\Models\Exceptions\RecordNotFoundException;
-use GradeSystem\Models\Page;
-use GradeSystem\Models\Response;
+use GradeSystem\Framework\Page;
+use GradeSystem\Framework\Response;
+use GradeSystem\Services\StudentFactory;
 use InvalidArgumentException;
 
 use GradeSystem\Models\Student;
@@ -15,39 +17,39 @@ class StudentController extends Controller
 {
     public const SCHOOL_BOARD_TYPE = "CSM";
 
-    public static function Index() : ?Student
+    public function index() : string
     {
-        if(!empty($_GET["id"]))
-        {
-            try {
-                if (!is_numeric($_GET["id"])) throw new InvalidArgumentException("InvalidArgumentException: Parameter value needs to be an integer");
+        $studentFactory = new StudentFactory(new StudentRepository());
 
-                $schoolBoard = SchoolBoardFactory::getSchoolBoard(self::SCHOOL_BOARD_TYPE);
+        $students = $studentFactory->findAll();
 
-                header("Body: names");
-
-                return $schoolBoard->findStudent((int)$_GET["id"]);
-            } catch (Exception $exception)
-            {
-                if($exception instanceof RecordNotFoundException)
-                {
-                    Response::e404(["message" => $exception->getMessage()]);
-                } else if( $exception instanceof InvalidArgumentException) {
-                    Response::e400(["message" => $exception->getMessage()]);
-                }
-                return NULL;
-            }
-        }
-
-        return NULL;
+        return json_encode($students);
     }
 
-    public static function Edit() : Page
+    public function show(int $id) : ?Student
+    {
+        try {
+            $schoolBoard = SchoolBoardFactory::getSchoolBoard(self::SCHOOL_BOARD_TYPE);
+
+            return $schoolBoard->findStudent($id);
+        } catch (Exception $exception)
+        {
+            if($exception instanceof RecordNotFoundException)
+            {
+                Response::e404(["message" => $exception->getMessage()]);
+            } else if( $exception instanceof InvalidArgumentException) {
+                Response::e400(["message" => $exception->getMessage()]);
+            }
+            return NULL;
+        }
+    }
+
+    public function edit() : Page
     {
         return new Page("Edit");
     }
 
-    public static function Delete() : Page
+    public function delete(int $id) : Page
     {
         return new Page("delete", ["title" => "Delete Page"]);
     }

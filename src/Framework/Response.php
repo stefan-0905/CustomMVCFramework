@@ -1,6 +1,6 @@
 <?php
 
-namespace GradeSystem\Models;
+namespace GradeSystem\Framework;
 
 class Response
 {

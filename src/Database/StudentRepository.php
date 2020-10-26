@@ -4,6 +4,18 @@ namespace GradeSystem\Database;
 
 class StudentRepository extends Repository implements IRepository
 {
+    public function findAll() : array
+    {
+        $sql = "SELECT id, name, grades FROM students;";
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute();
+
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
     public function findById(int $id) : array
     {
         try

@@ -1,12 +1,12 @@
 <?php
 
-namespace GradeSystem\Models;
+namespace GradeSystem\Framework;
 
 use GradeSystem\Models\Exceptions\ClassNotFoundException;
 
 class ControllerInvoker
 {
-    public static function invoke(string $controllerName, string $functionName) : void
+    public static function invoke(string $controllerName, string $functionName, array $params = array()) : void
     {
         try
         {
@@ -14,7 +14,10 @@ class ControllerInvoker
             {
                 $controller = (new \ReflectionClass($controllerName))->newInstance();
 
-                $result = call_user_func(array($controller, $functionName));
+                if(!method_exists($controller, $functionName))
+                    throw new \Exception("Specified method \"$functionName\" doesn't exist in this controller \"$controllerName\".");
+
+                $result = call_user_func_array(array($controller, $functionName), $params);
 
                 if(!($result instanceof Page))
                 {

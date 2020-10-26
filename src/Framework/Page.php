@@ -1,6 +1,6 @@
 <?php
 
-namespace GradeSystem\Models;
+namespace GradeSystem\Framework;
 
 class Page
 {
@@ -25,7 +25,9 @@ class Page
             require_once "./views/_layouts/front.php";
         }
         else {
-            Response::e404(["message" => "File for this page does not exist."]);
+            header("Status: 404 Not Found", true, 404);
+            header("Body: " . json_encode(["message" => "File for this page does not exist."]));
+            self::error();
         }
     }
 

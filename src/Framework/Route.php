@@ -1,12 +1,12 @@
 <?php
 
-namespace GradeSystem;
-
-use GradeSystem\Models\ControllerInvoker;
+namespace GradeSystem\Framework;
 
 class Route
 {
     private static array $validRoutes = array();
+
+    private static bool $invoked = false;
 
     /**
      * Checks to see if current page is valid i.e. is register in our route array
@@ -14,7 +14,12 @@ class Route
      */
     public static function exists() : bool
     {
-        return in_array(self::getPath(), self::$validRoutes, TRUE);
+        $currentRoute = new Endpoint(self::getPath());
+        foreach(self::$validRoutes as $route)
+        {
+            if($route->compare($currentRoute)) return true;
+        }
+        return false;
     }
 
     /**
@@ -26,17 +31,22 @@ class Route
     public static function set(string $route, string $callback) : void
     {
         $lowerRoute = strtolower($route);
-        self::$validRoutes[] = $lowerRoute;
+        //echo $lowerRoute . "||";
+        $route = new Endpoint($lowerRoute);
+        self::$validRoutes[] = $route;
 
         $path = self::getPath();
+        $currentRoute = new Endpoint($path);
 
-//        echo $path . " ";echo $route; echo "<br>";
+//        echo $route->path . "   " . $currentRoute->path . "<br>";
 
-        if($path == $lowerRoute || $path == ($lowerRoute . "/"))
+        if($route->compare($currentRoute) && !self::$invoked)
         {
             // First param is namespace of controller, and second is function on that controller
             $params = explode("@", $callback);
-            ControllerInvoker::invoke($params[0], $params[1]);
+            ControllerInvoker::invoke($params[0], $params[1], $currentRoute->parameters);
+
+            self::$invoked = true;
         }
 
     }
@@ -49,7 +59,7 @@ class Route
     private static function getPath() : string
     {
         $path = strtolower($_SERVER["REQUEST_URI"]);
-//        $path = str_replace("", "", $uri);
+
         $path = str_replace(".php", "", $path);
 
         if(str_contains($path, "?"))

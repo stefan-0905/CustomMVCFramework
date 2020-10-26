@@ -2,11 +2,11 @@
 
 namespace GradeSystem\Controllers;
 
-use GradeSystem\Models\Page;
+use GradeSystem\Framework\Page;
 
 class HomeController extends Controller
 {
-    public static function Index() : Page
+    public static function index() : Page
     {
         return new Page("Index", ["title" => "Home"]);
     }
