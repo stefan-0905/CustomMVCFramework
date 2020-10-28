@@ -1,6 +1,6 @@
 <?php
 
-namespace GradeSystem\Database;
+namespace App\Database;
 
 class StudentRepository extends Repository implements IRepository
 {

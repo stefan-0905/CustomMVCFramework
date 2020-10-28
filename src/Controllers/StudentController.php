@@ -1,17 +1,17 @@
 <?php
 
-namespace GradeSystem\Controllers;
+namespace App\Controllers;
 
 use Exception;
-use GradeSystem\Database\StudentRepository;
-use GradeSystem\Models\Exceptions\RecordNotFoundException;
-use GradeSystem\Framework\Page;
-use GradeSystem\Framework\Response;
-use GradeSystem\Services\StudentFactory;
+use App\Database\StudentRepository;
+use App\Models\Exceptions\RecordNotFoundException;
+use App\Framework\Page;
+use App\Framework\Response;
+use App\Services\StudentFactory;
 use InvalidArgumentException;
 
-use GradeSystem\Models\Student;
-use GradeSystem\Services\SchoolBoardFactory;
+use App\Models\Student;
+use App\Services\SchoolBoardFactory;
 
 class StudentController extends Controller
 {

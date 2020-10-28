@@ -1,6 +1,6 @@
 <?php
 
-namespace GradeSystem\Framework;
+namespace App\Framework;
 
 class Endpoint
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace GradeSystem\Framework;
+namespace App\Framework;
 
-use GradeSystem\Models\Exceptions\MethodNotAllowedException;
+use App\Models\Exceptions\MethodNotAllowedException;
 
 class Route
 {

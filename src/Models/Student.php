@@ -1,8 +1,8 @@
 <?php
 
-namespace GradeSystem\Models;
+namespace App\Models;
 
-use GradeSystem\Services\TextFormatter;
+use App\Services\TextFormatter;
 
 class Student
 {

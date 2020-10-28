@@ -1,9 +1,9 @@
 <?php
 
-namespace GradeSystem\Services;
+namespace App\Services;
 
-use GradeSystem\Models\Student;
-use GradeSystem\Database\IRepository;
+use App\Models\Student;
+use App\Database\IRepository;
 
 /**
  * Class StudentFactory - Intermediate service for parsing db result

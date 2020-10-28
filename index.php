@@ -2,8 +2,8 @@
 
 require_once realpath("vendor/autoload.php");
 
-use GradeSystem\Framework\Route;
-use GradeSystem\Framework\Response;
+use App\Framework\Route;
+use App\Framework\Response;
 
 require_once "routes.php";
 
@@ -13,7 +13,7 @@ try{
         Response::e404(["message" => "This page does not exist."]);
     }
 
-} catch (\GradeSystem\Models\Exceptions\MethodNotAllowedException $exception)
+} catch (\App\Models\Exceptions\MethodNotAllowedException $exception)
 {
     Response::e405(["message" => $exception->getMessage()]);
 } catch (Exception $exception)

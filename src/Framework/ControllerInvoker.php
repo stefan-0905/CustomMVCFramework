@@ -1,8 +1,8 @@
 <?php
 
-namespace GradeSystem\Framework;
+namespace App\Framework;
 
-use GradeSystem\Models\Exceptions\ClassNotFoundException;
+use App\Models\Exceptions\ClassNotFoundException;
 
 class ControllerInvoker
 {

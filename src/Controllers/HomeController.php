@@ -1,8 +1,8 @@
 <?php
 
-namespace GradeSystem\Controllers;
+namespace App\Controllers;
 
-use GradeSystem\Framework\Page;
+use App\Framework\Page;
 
 class HomeController extends Controller
 {

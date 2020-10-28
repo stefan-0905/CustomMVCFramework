@@ -1,9 +1,9 @@
 <?php
 
-namespace GradeSystem\Services;
+namespace App\Services;
 
-use GradeSystem\Models\Exceptions\RecordNotFoundException;
-use GradeSystem\Models\Student;
+use App\Models\Exceptions\RecordNotFoundException;
+use App\Models\Student;
 
 interface ISchoolBoard
 {

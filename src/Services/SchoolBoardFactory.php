@@ -1,8 +1,8 @@
 <?php
 
-namespace GradeSystem\Services;
+namespace App\Services;
 
-use GradeSystem\Database\StudentRepository;
+use App\Database\StudentRepository;
 
 class SchoolBoardFactory
 {

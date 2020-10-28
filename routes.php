@@ -1,9 +1,9 @@
 <?php
 
-use GradeSystem\Framework\Route;
+use \App\Framework\Route;
 
-Route::get("/", "\GradeSystem\Controllers\HomeController@Index");
-Route::get("/Student/Edit", "\GradeSystem\Controllers\StudentController@Edit");
-Route::get("/Student/{id}/Delete", "\GradeSystem\Controllers\StudentController@Delete");
-Route::get("/Student/{id}", "\GradeSystem\Controllers\StudentController@show");
-Route::get("/Student", "\GradeSystem\Controllers\StudentController@index");
+Route::get("/", "\App\Controllers\HomeController@Index");
+Route::get("/Student/Edit", "\App\Controllers\StudentController@Edit");
+Route::get("/Student/{id}/Delete", "\App\Controllers\StudentController@Delete");
+Route::get("/Student/{id}", "\App\Controllers\StudentController@show");
+Route::get("/Student", "\App\Controllers\StudentController@index");

@@ -1,6 +1,6 @@
 <?php
 
-namespace GradeSystem\Models\Exceptions;
+namespace App\Models\Exceptions;
 
 use Throwable;
 

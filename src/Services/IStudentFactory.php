@@ -1,8 +1,8 @@
 <?php
 
-namespace GradeSystem\Services;
+namespace App\Services;
 
-use GradeSystem\Models\Student;
+use App\Models\Student;
 
 interface IStudentFactory
 {

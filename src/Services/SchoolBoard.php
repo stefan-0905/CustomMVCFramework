@@ -1,10 +1,10 @@
 <?php
 
-namespace GradeSystem\Services;
+namespace App\Services;
 
-use GradeSystem\Database\IRepository;
-use GradeSystem\Models\Exceptions\RecordNotFoundException;
-use GradeSystem\Models\Student;
+use App\Database\IRepository;
+use App\Models\Exceptions\RecordNotFoundException;
+use App\Models\Student;
 
 class SchoolBoard implements ISchoolBoard
 {
