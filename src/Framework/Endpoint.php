@@ -4,49 +4,70 @@ namespace GradeSystem\Framework;
 
 class Endpoint
 {
-    public string $path;
-    public array $segments = array();
+    // Type of request - GET, POST, PUT...
+    public string $method;
+    // Url path
+    public URLPath $path;
+    // Parameters in path
     public array $parameters = array();
+    // Current endpoint
+    private static ?Endpoint $current = NULL;
 
-    public function __construct(string $path)
+    public function __construct(URLPath $path, string $method = "GET")
     {
         $this->path = $path;
+        $this->method = $method;
+    }
 
+    public static function getCurrent() : Endpoint
+    {
+        if(self::$current == NULL) self::$current = new Endpoint(URLPath::current(), $_SERVER["REQUEST_METHOD"]);
 
-        if(strpos($path, "/") == 0)
-        {
-            $this->path = substr($path, 1);
-        }
-//
-//        echo $path ."<br>";
-//        echo $this->path ."<br><br><br>";
-        $this->segments = explode("/", $this->path);
+        return self::$current;
     }
 
     public function compare(Endpoint $endpoint) : bool
     {
-        if(count($this->segments) != count($endpoint->segments)) return false;
+        return $this->compareBySegments($endpoint) && $this->compareByMethod($endpoint);
+    }
 
-        foreach ($this->segments as $index => $segment)
+    /**
+     * Compare endpoints by their segments.
+     * @param Endpoint $endpoint
+     * @return bool
+     */
+    public function compareBySegments(Endpoint $endpoint) : bool
+    {
+        if(count($this->path->segments) != count($endpoint->path->segments)) return false;
+
+        foreach ($this->path->segments as $index => $segment)
         {
             if(str_contains($segment, "{"))
             {
                 $parameter = str_replace("{", "", $segment);
                 $parameter = str_replace("}", "", $parameter);
 
-                $endpoint->parameters[$parameter] = $endpoint->segments[$index];
+                $endpoint->parameters[$parameter] = $endpoint->path->segments[$index];
 
                 continue;
             }
 
-//        print_r($this->segments); echo "<br>";
-//        print_r($endpoint->segments); echo "<br><br>";
-            if($segment != $endpoint->segments[$index])
+            if($segment != $endpoint->path->segments[$index])
             {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Compare endpoints by request method - GET, POST...
+     * @param Endpoint $endpoint
+     * @return bool
+     */
+    public function compareByMethod(Endpoint $endpoint) : bool
+    {
+        return $this->method == $endpoint->method;
     }
 }

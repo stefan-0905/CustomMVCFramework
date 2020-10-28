@@ -2,73 +2,104 @@
 
 namespace GradeSystem\Framework;
 
+use GradeSystem\Models\Exceptions\MethodNotAllowedException;
+
 class Route
 {
+    // Registered endpoint routes
     private static array $validRoutes = array();
 
+    // Is current path invoked
     private static bool $invoked = false;
-
-    /**
-     * Checks to see if current page is valid i.e. is register in our route array
-     * @return bool
-     */
-    public static function exists() : bool
-    {
-        $currentRoute = new Endpoint(self::getPath());
-        foreach(self::$validRoutes as $route)
-        {
-            if($route->compare($currentRoute)) return true;
-        }
-        return false;
-    }
 
     /**
      * Registers a route
      *
      * @param string $route
      * @param string $callback
+     * @param string $method
      */
-    public static function set(string $route, string $callback) : void
+    public static function set(string $route, string $callback, string $method) : void
     {
-        $lowerRoute = strtolower($route);
-        //echo $lowerRoute . "||";
-        $route = new Endpoint($lowerRoute);
+        $lowerCaseRoute = strtolower($route);
+        $route = new Endpoint(new URLPath($lowerCaseRoute), $method);
+
         self::$validRoutes[] = $route;
 
-        $path = self::getPath();
-        $currentRoute = new Endpoint($path);
-
-//        echo $route->path . "   " . $currentRoute->path . "<br>";
-
-        if($route->compare($currentRoute) && !self::$invoked)
-        {
-            // First param is namespace of controller, and second is function on that controller
-            $params = explode("@", $callback);
-            ControllerInvoker::invoke($params[0], $params[1], $currentRoute->parameters);
-
-            self::$invoked = true;
-        }
-
+        self::action($route, $callback);
     }
 
     /**
-     * Extract path from uri
+     * Action needed to happen on desired route
      *
-     * @return string
+     * @param Endpoint $route
+     * @param string $callback
      */
-    private static function getPath() : string
+    private static function action(Endpoint $route, string $callback) : void
     {
-        $path = strtolower($_SERVER["REQUEST_URI"]);
-
-        $path = str_replace(".php", "", $path);
-
-        if(str_contains($path, "?"))
+        if($route->compare(Endpoint::getCurrent()) && !self::$invoked)
         {
-            $pos = strpos($path, '?');
-            if($pos)
-                $path = substr($path, 0, $pos);
+            // First param is namespace of controller, and second is function on that controller
+            $params = explode("@", $callback);
+            ControllerInvoker::invoke($params[0], $params[1], Endpoint::getCurrent()->parameters);
+            self::$invoked = true;
+        }
+    }
+
+    public static function get(string $route, string $callback) : void
+    {
+        self::set($route, $callback, "GET");
+    }
+
+    public static function post(string $route, string $callback) : void
+    {
+        self::set($route, $callback, "POST");
+    }
+
+    public static function put(string $route, string $callback) : void
+    {
+        self::set($route, $callback, "PUT");
+    }
+
+    public static function patch(string $route, string $callback) : void
+    {
+        self::set($route, $callback, "PATCH");
+    }
+
+    public static function delete(string $route, string $callback) : void
+    {
+        self::set($route, $callback, "DELETE");
+    }
+
+    /**
+     * @return bool
+     * @throws MethodNotAllowedException
+     */
+    public static function exists() : bool
+    {
+        $isRouteWithDifferentRequestMethod = false;
+
+        foreach(self::$validRoutes as $route) {
+            if ($route->compare(Endpoint::getCurrent()))
+            {
+                // Route exists with same request method
+                return true;
+            }
+            if($route->compareBySegments(Endpoint::getCurrent()) && !$route->compareByMethod(Endpoint::getCurrent()))
+            {
+                // Route exists but with different request method
+                $isRouteWithDifferentRequestMethod = true;
+            }
         }
 
-        return $path;
+        if($isRouteWithDifferentRequestMethod)
+        {
+            // If it's not empty it means we have route with same path but different request method
+            throw new MethodNotAllowedException();
+        }
+        else {
+            // Route doesn't exist
+            return false;
+        }
     }
 }

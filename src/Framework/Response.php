@@ -18,4 +18,11 @@ class Response
         if(!empty($errorInfo)) header("Body: " . json_encode($errorInfo));
         Page::error();
     }
+
+    public static function e405(array $errorInfo = []): void
+    {
+        header("Status: 405 Method Not Allowed", true, 405);
+        if(!empty($errorInfo)) header("Body: " . json_encode($errorInfo));
+        Page::error();
+    }
 }

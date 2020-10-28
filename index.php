@@ -8,8 +8,17 @@ use GradeSystem\Framework\Response;
 require_once "routes.php";
 
 
-if (!Route::exists()) {
-    Response::e404(["message" => "This page does not exist."]);
+try{
+    if (!Route::exists()) {
+        Response::e404(["message" => "This page does not exist."]);
+    }
+
+} catch (\GradeSystem\Models\Exceptions\MethodNotAllowedException $exception)
+{
+    Response::e405(["message" => $exception->getMessage()]);
+} catch (Exception $exception)
+{
+    echo $exception->getMessage();
 }
 
 
