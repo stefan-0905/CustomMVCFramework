@@ -36,9 +36,9 @@ class StudentController extends Controller
         {
             if($exception instanceof RecordNotFoundException)
             {
-                Response::e404(["message" => $exception->getMessage()]);
+                Response::e404();
             } else if( $exception instanceof InvalidArgumentException) {
-                Response::e400(["message" => $exception->getMessage()]);
+                Response::e400();
             }
             return NULL;
         }

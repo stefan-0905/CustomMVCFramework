@@ -9,12 +9,8 @@ class Route
     // Registered endpoint routes
     private static array $validRoutes = array();
 
-    // Is current path invoked
-    private static bool $invoked = false;
-
     /**
      * Registers a route
-     *
      * @param string $route
      * @param string $callback
      * @param string $method
@@ -22,28 +18,14 @@ class Route
     public static function set(string $route, string $callback, string $method) : void
     {
         $lowerCaseRoute = strtolower($route);
-        $route = new Endpoint(new URLPath($lowerCaseRoute), $method);
+        $route = new Endpoint(new URLPath($lowerCaseRoute), $method, $callback);
+
+        if (self::find($route)) {
+            Response::e409();
+            return;
+        }
 
         self::$validRoutes[] = $route;
-
-        self::action($route, $callback);
-    }
-
-    /**
-     * Action needed to happen on desired route
-     *
-     * @param Endpoint $route
-     * @param string $callback
-     */
-    private static function action(Endpoint $route, string $callback) : void
-    {
-        if($route->compare(Endpoint::getCurrent()) && !self::$invoked)
-        {
-            // First param is namespace of controller, and second is function on that controller
-            $params = explode("@", $callback);
-            ControllerInvoker::invoke($params[0], $params[1], Endpoint::getCurrent()->parameters);
-            self::$invoked = true;
-        }
     }
 
     public static function get(string $route, string $callback) : void
@@ -72,10 +54,27 @@ class Route
     }
 
     /**
-     * @return bool
+     * Find route in already registered routes
+     * @param Endpoint $route
+     * @return Endpoint|null
+     */
+    public static function find(Endpoint $route) : ?Endpoint
+    {
+        foreach(self::$validRoutes as $r) {
+            if ($r->compare($route)) {
+                return $r;
+            }
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Check if current endpoint is registered. If so, return it
+     * @return Endpoint|null
      * @throws MethodNotAllowedException
      */
-    public static function exists() : bool
+    public static function exists() : ?Endpoint
     {
         $isRouteWithDifferentRequestMethod = false;
 
@@ -83,7 +82,7 @@ class Route
             if ($route->compare(Endpoint::getCurrent()))
             {
                 // Route exists with same request method
-                return true;
+                return $route;
             }
             if($route->compareBySegments(Endpoint::getCurrent()) && !$route->compareByMethod(Endpoint::getCurrent()))
             {
@@ -99,7 +98,7 @@ class Route
         }
         else {
             // Route doesn't exist
-            return false;
+            return NULL;
         }
     }
 }
