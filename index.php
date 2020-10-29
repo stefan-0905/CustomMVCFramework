@@ -2,24 +2,15 @@
 
 require_once realpath("vendor/autoload.php");
 
-use App\Framework\Route;
-use App\Framework\Response;
-
 require_once "routes.php";
 
+use \App\Framework\Kernel;
 
-try{
-    if (!Route::exists()) {
-        Response::e404(["message" => "This page does not exist."]);
-    }
+$kernel = new Kernel();
 
-} catch (\App\Models\Exceptions\MethodNotAllowedException $exception)
-{
-    Response::e405(["message" => $exception->getMessage()]);
-} catch (Exception $exception)
-{
-    echo $exception->getMessage();
-}
+$kernel->handle();
+
+
 
 
 

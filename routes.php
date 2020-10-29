@@ -3,6 +3,7 @@
 use \App\Framework\Route;
 
 Route::get("/", "\App\Controllers\HomeController@Index");
+Route::post("/", "\App\Controllers\HomeController@Index");
 Route::get("/Student/Edit", "\App\Controllers\StudentController@Edit");
 Route::get("/Student/{id}/Delete", "\App\Controllers\StudentController@Delete");
 Route::get("/Student/{id}", "\App\Controllers\StudentController@show");

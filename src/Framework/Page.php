@@ -7,7 +7,6 @@ class Page
     /**
      * Page constructor.Should be used only in controllers because it forms a path
      * based of controller name.
-     *
      * @param string $page
      * @param array $data
      */
@@ -18,7 +17,7 @@ class Page
             $$key = $value;
         }
 
-        $destination = $this->generatePagePath($page);
+        $destination = PagePathFinder::byControllerName($page);
 
         if(file_exists($destination))
         {
@@ -29,28 +28,6 @@ class Page
             header("Body: " . json_encode(["message" => "File for this page does not exist."]));
             self::error();
         }
-    }
-
-    /**
-     * Generates the path by looking in the backtrace for controller name and appending $page to it
-     *
-     * @param string $page
-     * @return string
-     */
-    private function generatePagePath(string $page) : string
-    {
-        $path = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS	)[1]["file"];
-
-        $path = explode('\\', $path);
-        $controller = array_pop($path);
-
-        $controller = str_replace(".php", "", $controller);
-        $folder = str_replace("Controller", "", $controller);
-        $folder .= "/";
-
-        if($folder == "Home/") $folder = "";
-
-        return "./views/" . $folder . $page .".php";
     }
 
     /**
