@@ -2,36 +2,36 @@
 
 namespace App\Framework;
 
-use App\Models\Exceptions\ClassNotFoundException;
-
 class ControllerInvoker
 {
     public static function invoke(string $controllerName, string $functionName, array $params = array()) : void
     {
-        try
-        {
-            if(class_exists($controllerName))
-            {
+        try {
+            if (class_exists($controllerName)) {
                 $controller = (new \ReflectionClass($controllerName))->newInstance();
 
-                if(!method_exists($controller, $functionName))
-                    throw new \Exception("Specified method \"$functionName\" doesn't exist in this controller \"$controllerName\".");
+                if (!method_exists($controller, $functionName))
+                {
+                    Response::e404(["message" => "Specified method \"$functionName\" doesn't exist in this controller \"$controllerName\"."]);
+                    return;
+                }
 
                 $result = call_user_func_array(array($controller, $functionName), $params);
 
-                if(!($result instanceof Page))
-                {
-                    echo $result;
+                if ($result instanceof Page) {
+                    return;
                 }
 
-            } else
-            {
-                throw new ClassNotFoundException($controllerName);
-            }
+                echo json_encode($result);
 
-        } catch (\Exception $exception)
+            } else {
+                Response::e404(["message" => "There is no class defined with this name $controllerName"]);
+                return;
+            }
+        } catch (\ReflectionException $exception)
         {
-            echo $exception->getMessage();
+            Response::e404(["message" => "There is no class defined with this name $controllerName"]);
+            return;
         }
     }
 }

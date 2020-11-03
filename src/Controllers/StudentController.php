@@ -17,13 +17,13 @@ class StudentController extends Controller
 {
     public const SCHOOL_BOARD_TYPE = "CSM";
 
-    public function index() : string
+    public function index() : array
     {
         $studentFactory = new StudentFactory(new StudentRepository());
 
         $students = $studentFactory->findAll();
 
-        return json_encode($students);
+        return $students;
     }
 
     public function show(int $id) : ?Student

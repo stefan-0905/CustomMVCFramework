@@ -7,7 +7,7 @@ use \App\Models\Exceptions\MethodNotAllowedException;
 
 class Kernel
 {
-    public function handle()
+    public function handle() : void
     {
         try
         {
